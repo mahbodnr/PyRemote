@@ -2,16 +2,17 @@ import sys
 from datetime import datetime
 import requests
 import traceback
+import warnings
 
 class connection(object):
-    def __init__(self, user_id, warning = False):
+    def __init__(self, user_id):
         """ """
         self.user_id = user_id
         self.webhook = "https://www.MahbodNouri.com/python/PyRemote/"
-        self.WARNING = warning
-        self._debug = True
+        self._debug = False
         if self._debug:
-            self.WARNING = True
+            warnings.filterwarnings('always')
+
 
     def _post_text(self, message, message_type):
         assert message_type in ['data', 'json'], "message_type must be 'data' or 'json'"
@@ -20,17 +21,17 @@ class connection(object):
         if message_type == 'json':
             response = requests.post(url= self.webhook, json = message)
 
-        if response.status_code != 200 and self.WARNING:
+        if response.status_code != 200:
             #Couldn't reach the Webhook server
-            print(f"WARMIMG: Sending message to telegram bot wasn't successful. Site response: {response}. this has occurred because you couldn't reach the server. It may get disappear after trying again, if not, please inform me at: mahbodnouri@gmail.com")
+             warnings.warn(f"WARMIMG: Sending message to telegram bot wasn't successful. Site response: {response}. this has occurred because you couldn't reach the server. It may get disappear after trying again, if not, please inform me at: mahbodnouri@gmail.com")
 
-        elif response.content != b'OK' and self.WARNING:
+        elif response.content != b'OK':
             #Telegram couldn't deliver the message
-            print(f"WARMIMG: Sending message to telegram bot wasn't successful. Error: {response.content}")
+            warnings.warn(f"WARMIMG: Sending message to telegram bot wasn't successful. Error: {response.content}")
         
         if self._debug:
-            print(f'response from server:{response.content}')
-            
+             warnings.warn(f'response from server: {response.content}')
+
     def send(self, msg, show_file_name=True):
         """ """
         try:
@@ -41,7 +42,6 @@ class connection(object):
             self._post_text(json_msg, 'json')
 
         except Exception as e:
-            if self.WARNING:
-                print(f"WARMIMG: Sending message to telegram bot wasn't successful. Error: {e}")
-                if self._debug:
-                    print(traceback.format_exc())
+            warnings.warn(f"WARMIMG: Sending message to telegram bot wasn't successful. Error: {e}")
+            if self._debug:
+                warnings.warn(traceback.format_exc())
