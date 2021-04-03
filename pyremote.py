@@ -1,13 +1,17 @@
 import sys
 from datetime import datetime
 import requests
+import traceback
 
 class connection(object):
-    def __init__(self, chat_id, warning = False):
+    def __init__(self, user_id, warning = False):
         """ """
-        self.id = chat_id
-        self.webhook = "https://www.MahbodNouri.com/python/PyRemote/bot"
+        self.user_id = user_id
+        self.webhook = "https://www.MahbodNouri.com/python/PyRemote/"
         self.WARNING = warning
+        self._debug = True
+        if self._debug:
+            self.WARNING = True
 
     def _post_text(self, message, message_type):
         assert message_type in ['data', 'json'], "message_type must be 'data' or 'json'"
@@ -24,11 +28,13 @@ class connection(object):
             #Telegram couldn't deliver the message
             print(f"WARMIMG: Sending message to telegram bot wasn't successful. Error: {response.content}")
         
-
+        if self._debug:
+            print(f'response from server:{response.content}')
+            
     def send(self, msg, show_file_name=True):
         """ """
         try:
-            json_msg = {"chat_id": self.id, "content" : msg}
+            json_msg = {"user_id": self.user_id, "content" : msg}
             if show_file_name:
                 json_msg['file'] = sys.argv[0]
 
@@ -37,3 +43,5 @@ class connection(object):
         except Exception as e:
             if self.WARNING:
                 print(f"WARMIMG: Sending message to telegram bot wasn't successful. Error: {e}")
+                if self._debug:
+                    print(traceback.format_exc())
