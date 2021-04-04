@@ -1,6 +1,6 @@
 from pyremote import connection
 
-my_user_id = 61982643713 #get your user_id from https://t.me/PyRemoteBot  #noqa 
+my_user_id = <user_id> #get your user_id from https://t.me/PyRemoteBot  #noqa 
 remote = connection(my_user_id) #connection your code to server
 # Your main code:
 number = 0
