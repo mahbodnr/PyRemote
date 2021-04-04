@@ -25,7 +25,7 @@ class connection(object):
         self.server = "https://www.MahbodNouri.com/python/PyRemote/"
         self.check_user_id(user_id)
         if self._debug:
-            warnings.filterwarnings('always')
+            warnings.filterwarnings('error')
 
     def _post_text(self, message, message_type):
         assert message_type in ['data', 'json'], "message_type must be 'data' or 'json'"
@@ -34,16 +34,16 @@ class connection(object):
         if message_type == 'json':
             response = requests.post(url= self.server, json = message)
 
+        if self._debug:
+             print(f'Response from server: {response.content}')
+        
         if response.status_code != 200:
             #Couldn't reach the server server
-             warnings.warn(f"WARMIMG: Couldn't reach the server! Server response: {response}. Please check your internet connection and try again.")
+             warnings.warn(f"PyRemote WARMIMG: Couldn't reach the server! Server response: {response}. Please check your internet connection and try again.")
 
         elif response.content != b'OK':
             #Telegram couldn't deliver the message
-            warnings.warn(f"WARMIMG: Sending message to telegram bot wasn't successful.{f' Error: {response.content}' if self._debug else ''}")
-        
-        if self._debug:
-             print(f'Response from server: {response.content}')
+            warnings.warn(f"PyRemote WARMIMG: Sending message to telegram bot wasn't successful.{f' Error: {response.content}' if self._debug else ''}")
 
     def send(self, msg, show_file_name=True):
         """ """
@@ -55,6 +55,6 @@ class connection(object):
             self._post_text(json_msg, 'json')
 
         except Exception as e:
-            warnings.warn(f"WARMIMG: Sending message to telegram bot wasn't successful. Error: {e}")
+            warnings.warn(f"PyRemote WARMIMG: Sending message to telegram bot wasn't successful. Error: {e}")
             if self._debug:
                 warnings.warn(traceback.format_exc())
