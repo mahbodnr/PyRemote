@@ -8,7 +8,7 @@ class connection(object):
     _debug = False
 
     def check_user_id(self, user_id):
-        message = {'check_user_id': user_id}
+        message = {"type": "check_user_id", 'user_id': user_id}
         response = requests.post(url= self.server, json = message)
         if self._debug:
              print(f'Response from server: {response.content}')
@@ -48,7 +48,9 @@ class connection(object):
     def send(self, msg, show_file_name=True):
         """ """
         try:
-            json_msg = {"user_id": self.user_id, "content" : msg}
+            json_msg = {"type": "notification", 
+            "user_id": self.user_id, 
+            "content" : msg}
             if show_file_name:
                 json_msg['file'] = sys.argv[0]
 
