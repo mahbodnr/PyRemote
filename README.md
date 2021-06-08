@@ -14,5 +14,6 @@ number = 0
 for _ in range(10000):
     number += 1
 ###
-remote.send(f'Calculation finished! Final number is: {number}') # Send notification to your Telegram account
+# Send notification to your Telegram account:
+remote.send(f'Calculation finished! Final number is: {number}')
 ```
