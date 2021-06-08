@@ -1,6 +1,6 @@
 # PyRemote
 Send yourself notifications from your python code to your Telegram account
-go to https://t.me/PyRemoteBot to het or change your unique 'user_id'
+go to https://t.me/PyRemoteBot to het or change your unique `user_id`
 
 ## Example:
 Send yourself a notification when your code finished running:
